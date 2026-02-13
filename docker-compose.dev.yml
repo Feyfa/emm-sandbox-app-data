@@ -1,19 +1,19 @@
 # EMM-SANDBOX-NEW-APP — Laravel (WEB) — Development
 # MySQL tidak di sini; jalankan terpisah (EMM-SANDBOX-NEW-DB atau MySQL di host).
 # Jalankan: docker compose -f docker-compose.dev.yml up -d
-name: emm-sandbox-app-new
+name: emm_sandbox_app_data
 
 services:
   app:
     build: .
-    container_name: emm_sandbox_app_new
+    container_name: emm_sandbox_app_data_app
     volumes:
       - .:/var/www/html
     # Koneksi MySQL via .env (DB_HOST): host.docker.internal atau nama container DB jika pakai project terpisah
 
   nginx:
     image: nginx:1.29.5-alpine
-    container_name: emm_sandbox_app_new_nginx
+    container_name: emm_sandbox_app_data_nginx
     ports:
       - "8002:80"
     volumes:

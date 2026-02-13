@@ -23,6 +23,21 @@ docker compose -f docker-compose.dev.yml down
 
 Laravel dapat diakses di http://localhost:8002 (pastikan MySQL sudah berjalan terpisah; atur `DB_HOST` di `.env`).
 
+**Install Dependencies (jika belum ada vendor):**
+
+Setelah container berjalan, jika folder `vendor/` belum ada, jalankan composer install di dalam container:
+
+```bash
+docker exec -it emm_sandbox_app_new composer install
+```
+
+Atau jika ingin masuk ke terminal container terlebih dahulu:
+
+```bash
+docker exec -it emm_sandbox_app_new bash
+composer install
+```
+
 ---
 
 ## About Laravel
