@@ -9,24 +9,25 @@ class TestController extends Controller
 {
     public function test(Request $request)
     {
-        $keyword = "powlowski.isabell@example.com";
+        $keyword = "Mr. Nicola Christiansen";
+        $key = "name";
 
         // search based on database
         $start_time = microtime(true);
-        $users1 = User::where('email', 'like', "%$keyword%")
+        $users1 = User::where($key, 'like', "%$keyword%")
             ->get()
             ->toArray();
         $end_time = microtime(true);
-        $execution_time_first = round($end_time - $start_time, 2);
+        $execution_time_first = round($end_time - $start_time, 4);
 
         // call scout search
         $start_time = microtime(true);
         $users2 = User::search($keyword)
-            ->where('email', $keyword) // Filter exact match
+            ->where($key, $keyword) // Filter exact match
             ->get()
             ->toArray();
         $end_time = microtime(true);
-        $execution_time = round($end_time - $start_time, 2);
+        $execution_time = round($end_time - $start_time, 4);
         // call scout search
 
         // response

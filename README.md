@@ -90,3 +90,21 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Setup Permission Dev Jika Anda Pakai Windows + WSL
+
+Jika Anda memakai Windows dengan WSL, jalankan perintah ini di PowerShell/CMD:
+
+```bash
+bash setup-windows-wsl-dev.sh
+```
+
+## Meilisearch — Reindex & import
+
+```bash
+php artisan scout:sync-index-settings
+php artisan scout:import "App\\Models\\User"
+```
+
+---
