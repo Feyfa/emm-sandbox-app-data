@@ -35,6 +35,7 @@ class UserSeeder extends Seeder
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
+                $this->command->info("Creating user $j");
             }
             
             // Bulk insert
