@@ -21,3 +21,16 @@ services:
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
+  
+  meilisearch:
+    image: getmeili/meilisearch:v1.7
+    container_name: emm_sandbox_app_data_meilisearch
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+    volumes:
+      - meili_data:/meili_data
+
+volumes:
+  meili_data:
