@@ -47,6 +47,10 @@ class User extends Authenticatable
         ];
     }
 
+    /**
+     * function ini digunakan untuk memilih, field mana saja yang boleh di index oleh scout, jadi saat menjalankan php artisan scout:import "App\Models\User", hanya field ini saja lah yang akan di index, dan field ini juga yang akan muncul saat melakukan search, jadi kalau kita ingin menambahkan field baru ke Meilisearch di server, kita harus menambahkannya di function ini, dan jangan lupa untuk menjalankan php artisan scout:import "App\Models
+     * @return array{email: string, id: mixed, name: string}
+     */
     public function toSearchableArray()
     {
         return [

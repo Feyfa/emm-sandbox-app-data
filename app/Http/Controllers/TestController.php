@@ -9,7 +9,7 @@ class TestController extends Controller
 {
     public function test(Request $request)
     {
-        $keyword = "Mr. Nicola Christiansen";
+        $keyword = "Dr. Norberto Eichmann IV";
         $key = "name";
 
         // search based on database

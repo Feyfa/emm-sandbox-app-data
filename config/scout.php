@@ -141,7 +141,7 @@ return [
         'key' => env('MEILISEARCH_KEY'),
         'index-settings' => [
             'users' => [
-                'filterableAttributes'=> ['id', 'name', 'email'],
+                'filterableAttributes'=> ['id', 'name', 'email'], // ini digunakan untuk mengizinkan field mana yang boleh di where() setelah search()
             ],
         ],
     ],
