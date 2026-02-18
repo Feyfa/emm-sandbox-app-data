@@ -1,0 +1,37 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 🔐 Connect ke Tailscale
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}
+
+      # 🔑 Setup SSH key
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      # 🚀 Deploy ke VM
+      - name: Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no jidan@100.123.90.41 << 'EOF'
+            cd /home/jidan/app   # lokasi project di VM
+            git pull origin main
+            npm install --omit=dev || true
+            npm run build || true
+            sudo systemctl restart nginx || true
+          EOF
