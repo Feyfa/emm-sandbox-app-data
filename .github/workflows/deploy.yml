@@ -2,36 +2,38 @@ name: Deploy to VM
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      # 🔐 Connect ke Tailscale
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
         with:
           authkey: ${{ secrets.TAILSCALE_AUTH_KEY }}
 
-      # 🔑 Setup SSH key
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-      # 🚀 Deploy ke VM
-      - name: Deploy via SSH
+      - name: Deploy via SSH (Docker Compose)
         run: |
           ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no jidan@100.123.90.41 << 'EOF'
+            set -e
+
             cd /home/jidan/app
+
+            echo "📥 Pull latest code"
             git pull origin main
-            npm install --omit=dev || true
-            npm run build || true
-            sudo systemctl restart nginx || true
+
+            echo "🐳 Rebuild & restart containers"
+            docker compose down
+            docker compose up -d --build
+
+            echo "🧹 Cleanup unused images"
+            docker image prune -f
           EOF
