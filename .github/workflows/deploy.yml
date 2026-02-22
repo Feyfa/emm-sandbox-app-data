@@ -31,8 +31,8 @@ jobs:
             git pull origin main
 
             echo "🐳 Rebuild & restart containers"
-            docker compose down
-            docker compose up -d --build
+            docker compose -f docker-compose.dev.yml down
+            docker compose -f docker-compose.dev.yml up -d --build
 
             echo "🧹 Cleanup unused images"
             docker image prune -f
