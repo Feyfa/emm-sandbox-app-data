@@ -9,6 +9,5 @@ Route::get('/jidan', function () {
     return response()->json([
         'first_name' => 'Muhammad',
         'last_name' => 'Jidan',
-        'age' => 21,
     ]);
 });
