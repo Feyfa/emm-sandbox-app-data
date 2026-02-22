@@ -25,7 +25,7 @@ jobs:
           ssh -i ~/.ssh/proxmox_vm100 -o StrictHostKeyChecking=no vm100@100.87.116.53 << 'EOF'
             set -e
 
-            cd /home/jidan/app
+            cd /home/vm100/app
 
             echo "📥 Pull latest code"
             git pull origin main
