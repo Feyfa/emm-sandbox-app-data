@@ -8,6 +8,6 @@ Route::get('/', function () {
 Route::get('/jidan', function () {
     return response()->json([
         'first_name' => 'Muhammad',
-        'last_name' => 'Jidan',
+        'last_name' => 'Jidann',
     ]);
 });
