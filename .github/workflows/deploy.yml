@@ -17,12 +17,12 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/proxmox_vm100
+          chmod 600 ~/.ssh/proxmox_vm100
 
       - name: Deploy via SSH (Docker Compose)
         run: |
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no vm100@100.87.116.53 << 'EOF'
+          ssh -i ~/.ssh/proxmox_vm100 -o StrictHostKeyChecking=no vm100@100.87.116.53 << 'EOF'
             set -e
 
             cd /home/jidan/app
