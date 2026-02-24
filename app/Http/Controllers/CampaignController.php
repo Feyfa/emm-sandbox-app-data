@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CampaignController extends Controller
 {
     public function index()
     {
+        Log::info('ini adalah function ' . __FUNCTION__);
         return response()->json([
             'message' => 'ini adalah function ' . __FUNCTION__,
         ]);
@@ -15,6 +17,7 @@ class CampaignController extends Controller
 
     public function show($id)
     {
+        Log::info('ini adalah function ' . __FUNCTION__);
         return response()->json([
             'message' => 'ini adalah function ' . __FUNCTION__,
             'id' => $id,
@@ -23,6 +26,7 @@ class CampaignController extends Controller
 
     public function store(Request $request)
     {
+        Log::info('ini adalah function ' . __FUNCTION__);
         return response()->json([
             'message' => 'ini adalah function ' . __FUNCTION__,
         ]);
@@ -30,6 +34,7 @@ class CampaignController extends Controller
 
     public function update(Request $request, $id)
     {
+        Log::info('ini adalah function ' . __FUNCTION__);
         return response()->json([
             'message' => 'ini adalah function ' . __FUNCTION__,
             'id' => $id,
@@ -38,6 +43,7 @@ class CampaignController extends Controller
 
     public function destroy($id)
     {
+        Log::info('ini adalah function ' . __FUNCTION__);
         return response()->json([
             'message' => 'ini adalah function ' . __FUNCTION__,
             'id' => $id,
