@@ -11,3 +11,9 @@ Route::get('/jidan', function () {
         'last_name' => 'Jidann',
     ]);
 });
+Route::get('/agies', function () {
+    return response()->json([
+        'first_name' => 'Agies',
+        'last_name' => 'Wahyudi',
+    ]);
+});
