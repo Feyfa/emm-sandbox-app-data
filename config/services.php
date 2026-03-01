@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'whop' => [
+        'api_key'        => env('WHOP_API_KEY'),
+        'company_id'     => env('WHOP_COMPANY_ID'),
+        'webhook_secret' => env('WHOP_WEBHOOK_SECRET'),
+    ],
+
 ];

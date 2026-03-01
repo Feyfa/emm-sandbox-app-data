@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Scout\Searchable;
+use App\Models\PaymentMethod;
+use App\Models\Invoice;
 
 class User extends Authenticatable
 {
@@ -19,8 +21,10 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
+        'clerk_user_id',
         'name',
         'email',
+        'avatar_url',
         'password',
     ];
 
@@ -51,6 +55,21 @@ class User extends Authenticatable
      * function ini digunakan untuk memilih, field mana saja yang boleh di index oleh scout, jadi saat menjalankan php artisan scout:import "App\Models\User", hanya field ini saja lah yang akan di index, dan field ini juga yang akan muncul saat melakukan search, jadi kalau kita ingin menambahkan field baru ke Meilisearch di server, kita harus menambahkannya di function ini, dan jangan lupa untuk menjalankan php artisan scout:import "App\Models
      * @return array{email: string, id: mixed, name: string}
      */
+    public function userIdentities()
+    {
+        return $this->hasMany(UserIdentity::class);
+    }
+
+    public function paymentMethods()
+    {
+        return $this->hasMany(PaymentMethod::class);
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function toSearchableArray()
     {
         return [

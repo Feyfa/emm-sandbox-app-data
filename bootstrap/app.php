@@ -12,7 +12,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->use([
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+
+        // Register middleware alias
+        $middleware->alias([
+            'clerk.auth' => \App\Http\Middleware\ClerkAuthenticate::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
