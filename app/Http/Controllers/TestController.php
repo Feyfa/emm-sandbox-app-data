@@ -5,9 +5,104 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Services\WhopService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class TestController extends Controller
 {
+    public function dbRead(Request $request)
+    {
+        $email = (string) $request->query('email', $request->input('email', ''));
+
+        if ($email === '') {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Parameter email wajib diisi.',
+                'example' => '/test/db/read?email=user@example.com',
+            ], 422);
+        }
+        
+        Log::info("Attempting to read user with email: {$email}");
+
+        $pgsqlUser = User::where('email', $email)->first();
+        $mysqlUser = User::on('mysql')->where('email', $email)->first();
+
+        return response()->json([
+            'ok' => true,
+            'email' => $email,
+            'pgsql' => [
+                'connection' => 'pgsql',
+                'found' => $pgsqlUser !== null,
+                'user' => $pgsqlUser,
+            ],
+            'mysql' => [
+                'connection' => 'mysql',
+                'found' => $mysqlUser !== null,
+                'user' => $mysqlUser,
+            ],
+        ]);
+    }
+
+    public function dbCreate(Request $request)
+    {
+        $target = (string) $request->input('target', 'both');
+
+        if (!in_array($target, ['pgsql', 'mysql', 'both'], true)) {
+            return response()->json([
+                'ok' => false,
+                'message' => 'Parameter target harus: pgsql | mysql | both.',
+            ], 422);
+        }
+
+        $name = (string) $request->input('name', 'Test User');
+        $email = (string) $request->input('email', 'test+'.Str::lower(Str::random(8)).'@example.com');
+        $password = (string) $request->input('password', 'password');
+
+        $payload = [
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+        ];
+
+        $created = [];
+
+        try {
+            if (in_array($target, ['pgsql', 'both'], true)) {
+                $created['pgsql'] = User::create($payload);
+            }
+
+            if (in_array($target, ['mysql', 'both'], true)) {
+                $created['mysql'] = User::on('mysql')->create($payload);
+            }
+
+            return response()->json([
+                'ok' => true,
+                'target' => $target,
+                'input' => [
+                    'name' => $name,
+                    'email' => $email,
+                ],
+                'created' => $created,
+                'examples' => [
+                    'create_pgsql' => '/test/db/create?target=pgsql&name=Jidan&email=jidan.pg@example.com&password=secret123',
+                    'create_mysql' => '/test/db/create?target=mysql&name=Jidan&email=jidan.my@example.com&password=secret123',
+                    'create_both' => '/test/db/create?target=both&name=Jidan&email=jidan.both@example.com&password=secret123',
+                    'read' => '/test/db/read?email=jidan.both@example.com',
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'ok' => false,
+                'target' => $target,
+                'input' => [
+                    'name' => $name,
+                    'email' => $email,
+                ],
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function test(Request $request)
     {
         $keyword = "Dr. Norberto Eichmann IV";
