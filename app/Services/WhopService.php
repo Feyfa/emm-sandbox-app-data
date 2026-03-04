@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class WhopService
 {
@@ -188,6 +189,38 @@ class WhopService
                 'body'   => $response->body(),
             ]);
             throw new \Exception('Failed to create subscription payment: ' . $response->body());
+        }
+
+        return $response->json();
+    }
+
+    /**
+     * Transfer funds from configured company ledger to destination ledger/user.
+     * Amount is in dollars (e.g. 5.00 for $5).
+     */
+    public function createTransfer(string $destinationId, float $amount, string $currency = 'usd', ?string $notes = null, ?string $idempotenceKey = null): array
+    {
+        $payload = [
+            'origin_id'       => $this->companyId,
+            'destination_id'  => $destinationId,
+            'amount'          => $amount,
+            'currency'        => $currency,
+            'idempotence_key' => $idempotenceKey ?: (string) Str::uuid(),
+        ];
+
+        if (!empty($notes)) {
+            $payload['notes'] = $notes;
+        }
+
+        $response = $this->http()->post('/transfers', $payload);
+
+        if ($response->failed()) {
+            Log::error('[WhopService] createTransfer failed', [
+                'status' => $response->status(),
+                'body'   => $response->body(),
+                'payload' => $payload,
+            ]);
+            throw new \Exception('Failed to create transfer: ' . $response->body());
         }
 
         return $response->json();
