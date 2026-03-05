@@ -15,6 +15,12 @@ class TestController extends Controller
         Log::info("jidantest1");
     }
 
+    public function jidantest2()
+    {
+        $this->jidantest1();
+        Log::info("jidantest2");
+    }
+
     public function dbRead(Request $request)
     {
         $email = (string) $request->query('email', $request->input('email', ''));
