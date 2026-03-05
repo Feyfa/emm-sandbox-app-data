@@ -10,14 +10,8 @@ use Illuminate\Support\Str;
 
 class TestController extends Controller
 {
-    public function jidantest1()
-    {
-        Log::info("jidantest1");
-    }
-
     public function jidantest2()
     {
-        $this->jidantest1();
         Log::info("jidantest2");
     }
 
